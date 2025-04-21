@@ -1,70 +1,117 @@
-# Getting Started with Create React App
+# Aplicação de Login em React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Esta aplicação foi desenvolvida como parte de uma atividade somativa da disciplina de DevOps e Desenvolvimento Web. O objetivo é criar um componente de login simples, que valida as credenciais de um usuário e exibe mensagens adequadas conforme os resultados.
 
-## Available Scripts
+## Funcionalidade
 
-In the project directory, you can run:
+A aplicação de login possui os seguintes requisitos:
 
-### `npm start`
+1. **Campos de Entrada**:
+   - **E-mail**: Um campo para o usuário inserir seu e-mail.
+   - **Senha**: Um campo para o usuário inserir sua senha.
+   
+2. **Botão de Validação**:
+   - Um botão de "Acessar" que, ao ser clicado, verifica as credenciais inseridas.
+   
+3. **Validação**:
+   - Caso o e-mail inserido seja **`eduardo.lino@pucpr.br`** e a senha seja **`123456`**, será exibida a mensagem **"Acessado com sucesso!"**.
+   - Caso contrário, a mensagem **"Usuário ou senha incorretos!"** será mostrada.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tecnologias Utilizadas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React**: Biblioteca JavaScript para a construção da interface de usuário.
+- **Node.js**: Ambiente de execução para JavaScript no lado do servidor.
+- **Docker**: Utilizado para containerizar a aplicação e facilitar o processo de deployment.
 
-### `npm test`
+## Como Rodar a Aplicação
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Clonar o Repositório
 
-### `npm run build`
+Primeiro, faça o clone deste repositório para sua máquina local:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/seu-usuario/login-app.git
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+cd login-app
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Instalar Dependências
 
-### `npm run eject`
+A aplicação é construída com React, e para rodá-la localmente, você precisa instalar as dependências. Para isso, use o `npm` (ou `yarn`, se preferir):
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm install
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Este comando irá instalar todas as dependências listadas no arquivo `package.json`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 3. Rodar a Aplicação Localmente
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Após instalar as dependências, você pode rodar a aplicação localmente com o seguinte comando:
 
-## Learn More
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Isso irá iniciar o servidor de desenvolvimento do React, e você poderá acessar a aplicação no seu navegador em:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+http://localhost:3000
+```
 
-### Code Splitting
+### 4. Rodar a Aplicação com Docker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Caso queira rodar a aplicação em um ambiente containerizado, siga os passos abaixo.
 
-### Analyzing the Bundle Size
+#### 4.1. Criar a Imagem Docker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Na raiz do seu projeto, execute o comando para criar a imagem Docker:
 
-### Making a Progressive Web App
+```bash
+docker build -t login-app .
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### 4.2. Rodar o Container Docker
 
-### Advanced Configuration
+Após a construção da imagem, rode o container da aplicação com o seguinte comando:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+docker run -p 8080:80 login-app
+```
 
-### Deployment
+Agora, a aplicação estará rodando em `http://localhost:8080`. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 5. Arquivos Importantes
 
-### `npm run build` fails to minify
+- **`Dockerfile`**: Contém a configuração para a criação da imagem Docker da aplicação. Utiliza dois estágios, um para a construção e outro para a produção.
+- **`nginx.conf`**: Arquivo de configuração do Nginx utilizado para servir a aplicação React em produção.
+- **`src/App.js`**: O código do componente React que contém o formulário de login e a lógica de validação.
+- **`package.json`**: Contém as dependências do projeto e scripts de execução.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Estrutura do Projeto
+
+```
+login-app/
+│
+├── build/                   # Arquivos gerados durante a build para produção
+├── node_modules/            # Dependências do projeto
+├── public/                  # Arquivos estáticos (como index.html)
+├── src/                     # Código-fonte da aplicação React
+│   └── App.js               # Componente principal da aplicação (Login)
+├── Dockerfile               # Arquivo para criar a imagem Docker
+├── nginx.conf               # Arquivo de configuração do Nginx
+├── package.json             # Dependências do projeto
+└── README.md                # Este arquivo
+```
+
+## Considerações Finais
+
+Este projeto foi desenvolvido para praticar o uso de React, containerização com Docker e a lógica de validação de formulários. Ao seguir os passos acima, o projeto estará pronto para ser executado localmente ou em produção através do Docker.
+
+---
+
+**Autor**: Julia Padilha da Rosa
+
+**Data de Criação**: 21/04/2025
+
+---
