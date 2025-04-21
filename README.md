@@ -111,7 +111,3 @@ Este projeto foi desenvolvido para praticar o uso de React, containerização co
 ---
 
 **Autor**: Julia Padilha da Rosa
-
-**Data de Criação**: 21/04/2025
-
----
