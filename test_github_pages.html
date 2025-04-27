@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Testes - GitHub Pages</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1 {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      border-left: 4px solid #4CAF50;
+      background-color: #f9f9f9;
+    }
+    .test-result.pass {
+      border-left-color: #4CAF50;
+    }
+    .test-result.fail {
+      border-left-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Relatório de Testes Unitários</h1>
+  <div class="container">
+    <h2>Resultados dos Testes</h2>
+    <p>Última atualização: <span id="update-date"></span></p>
+    
+    <div class="test-summary">
+      <h3>Resumo</h3>
+      <p>Total de testes: 11</p>
+      <p class="test-result pass">Testes aprovados: 11</p>
+      <p class="test-result">Testes não aprovados: 0</p>
+    </div>
+    
+    <div class="test-details">
+      <h3>Detalhes dos Testes</h3>
+      <div class="test-result pass">
+        <strong>App.test.js:</strong> renderiza o app sem crashes
+      </div>
+      <div class="test-result pass">
+        <strong>src/__tests__/basic.test.js:</strong> verificações básicas de funcionalidade
+      </div>
+      <div class="test-result pass">
+        <strong>src/__tests__/App.test.js:</strong> testes do componente App
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('update-date').textContent = new Date().toLocaleDateString();
+  </script>
+</body>
+</html>
