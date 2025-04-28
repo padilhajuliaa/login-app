@@ -1,0 +1,88 @@
+name: Alerts Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1'  # Executa toda segunda-feira à meia-noite
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: npm audit
+        continue-on-error: true
+
+      - name: Send email notification on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{secrets.MAIL_SERVER}}
+          server_port: ${{secrets.MAIL_PORT}}
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: ⚠️ Alerta de Segurança - Projeto login-app
+          body: |
+            Olá,
+            
+            Foi detectado um problema de segurança no seu projeto login-app.
+            
+            Por favor, verifique os logs do GitHub Actions para mais detalhes.
+            
+            Atenciosamente,
+            GitHub Actions
+          to: juliapadilhadarosa@example.com
+          from: github-actions@example.com
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Check outdated dependencies
+        run: npm outdated
+        continue-on-error: true
+        
+      - name: Send notification on outdated dependencies
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{secrets.MAIL_SERVER}}
+          server_port: ${{secrets.MAIL_PORT}}
+          username: ${{secrets.MAIL_USERNAME}}
+          password: ${{secrets.MAIL_PASSWORD}}
+          subject: 📦 Relatório de Dependências - Projeto login-app
+          body: |
+            Olá,
+            
+            Aqui está o relatório de dependências do seu projeto login-app.
+            Algumas dependências podem precisar de atualização.
+            
+            Verifique os logs do GitHub Actions para mais detalhes.
+            
+            Atenciosamente,
+            GitHub Actions
+          to: juliapadilhadarosa@example.com
+          from: github-actions@example.com
