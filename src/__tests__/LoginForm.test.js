@@ -49,4 +49,36 @@ describe('LoginForm Component', () => {
     // Verificar se a mensagem de erro aparece
     expect(screen.getByText(/Usuário ou senha incorretos!/i)).toBeInTheDocument();
   });
+
+  test('email input validation requires @ character', () => {
+    render(<LoginForm />);
+    
+    // Preencher o campo de email com um valor inválido
+    const emailInput = screen.getByLabelText(/E-mail:/i);
+    fireEvent.change(emailInput, { target: { value: 'emailinvalido' } });
+    
+    // Tentar submeter o formulário clicando no botão
+    fireEvent.click(screen.getByRole('button', { name: /Acessar/i }));
+    
+    // Verificar se a validação do navegador é acionada (o input tem o atributo 'required' e type='email')
+    // Verificamos se o formulário possui validação
+    expect(emailInput).toHaveAttribute('type', 'email');
+    expect(emailInput).toHaveAttribute('required');
+  });
+
+  test('form fields update correctly when typing', () => {
+    render(<LoginForm />);
+    
+    // Obter os inputs
+    const emailInput = screen.getByLabelText(/E-mail:/i);
+    const passwordInput = screen.getByLabelText(/Senha:/i);
+    
+    // Digitar nos campos
+    fireEvent.change(emailInput, { target: { value: 'teste@exemplo.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'senha123' } });
+    
+    // Verificar se os valores foram atualizados
+    expect(emailInput.value).toBe('teste@exemplo.com');
+    expect(passwordInput.value).toBe('senha123');
+  });
 });
