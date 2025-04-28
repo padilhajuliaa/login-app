@@ -29,37 +29,14 @@ jobs:
         run: npm audit || true
         continue-on-error: true
 
-      - name: Check for mail credentials
-        id: check-secrets
+      - name: Mock email notification
+        if: failure()
         run: |
-          if [[ "${{ secrets.MAIL_SERVER }}" && "${{ secrets.MAIL_PORT }}" && "${{ secrets.MAIL_USERNAME }}" && "${{ secrets.MAIL_PASSWORD }}" ]]; then
-            echo "has_mail_secrets=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_mail_secrets=false" >> $GITHUB_OUTPUT
-            echo "Email não será enviado pois os segredos não foram configurados."
-          fi
-
-      - name: Send email notification on failure
-        if: failure() && steps.check-secrets.outputs.has_mail_secrets == 'true'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{secrets.MAIL_SERVER}}
-          server_port: ${{secrets.MAIL_PORT}}
-          username: ${{secrets.MAIL_USERNAME}}
-          password: ${{secrets.MAIL_PASSWORD}}
-          subject: ⚠️ Alerta de Segurança - Projeto login-app
-          body: |
-            Olá,
-            
-            Foi detectado um problema de segurança no seu projeto login-app.
-            
-            Por favor, verifique os logs do GitHub Actions para mais detalhes.
-            
-            Atenciosamente,
-            GitHub Actions
-          to: juliapadilhadarosa@hotmail.com
-          from: juliapadilhadarosa@hotmail.com
-        continue-on-error: true
+          echo "=== SIMULAÇÃO DE NOTIFICAÇÃO DE SEGURANÇA ==="
+          echo "Para: juliapadilhadarosa@hotmail.com"
+          echo "Assunto: ⚠️ Alerta de Segurança - Projeto login-app"
+          echo "Corpo: Foi detectado um problema de segurança no projeto login-app."
+          echo "=== FIM DA SIMULAÇÃO ==="
 
   dependency-check:
     runs-on: ubuntu-latest
@@ -81,35 +58,10 @@ jobs:
         run: npm outdated || true
         continue-on-error: true
         
-      - name: Check for mail credentials
-        id: check-secrets
+      - name: Mock dependency report email
         run: |
-          if [[ "${{ secrets.MAIL_SERVER }}" && "${{ secrets.MAIL_PORT }}" && "${{ secrets.MAIL_USERNAME }}" && "${{ secrets.MAIL_PASSWORD }}" ]]; then
-            echo "has_mail_secrets=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_mail_secrets=false" >> $GITHUB_OUTPUT
-            echo "Email não será enviado pois os segredos não foram configurados."
-          fi
-        
-      - name: Send notification on outdated dependencies
-        if: success() && steps.check-secrets.outputs.has_mail_secrets == 'true'
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{secrets.MAIL_SERVER}}
-          server_port: ${{secrets.MAIL_PORT}}
-          username: ${{secrets.MAIL_USERNAME}}
-          password: ${{secrets.MAIL_PASSWORD}}
-          subject: 📦 Relatório de Dependências - Projeto login-app
-          body: |
-            Olá,
-            
-            Aqui está o relatório de dependências do seu projeto login-app.
-            Algumas dependências podem precisar de atualização.
-            
-            Verifique os logs do GitHub Actions para mais detalhes.
-            
-            Atenciosamente,
-            GitHub Actions
-          to: juliapadilhadarosa@hotmail.com
-          from: juliapadilhadarosa@hotmail.com
-        continue-on-error: true
+          echo "=== SIMULAÇÃO DE RELATÓRIO DE DEPENDÊNCIAS ==="
+          echo "Para: juliapadilhadarosa@hotmail.com"
+          echo "Assunto: 📦 Relatório de Dependências - Projeto login-app"
+          echo "Corpo: Aqui está o relatório de dependências do seu projeto login-app."
+          echo "=== FIM DA SIMULAÇÃO ==="
