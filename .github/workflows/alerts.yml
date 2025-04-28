@@ -29,8 +29,18 @@ jobs:
         run: npm audit || true
         continue-on-error: true
 
+      - name: Check for mail credentials
+        id: check-secrets
+        run: |
+          if [[ "${{ secrets.MAIL_SERVER }}" && "${{ secrets.MAIL_PORT }}" && "${{ secrets.MAIL_USERNAME }}" && "${{ secrets.MAIL_PASSWORD }}" ]]; then
+            echo "has_mail_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_mail_secrets=false" >> $GITHUB_OUTPUT
+            echo "Email não será enviado pois os segredos não foram configurados."
+          fi
+
       - name: Send email notification on failure
-        if: failure()
+        if: failure() && steps.check-secrets.outputs.has_mail_secrets == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{secrets.MAIL_SERVER}}
@@ -47,8 +57,8 @@ jobs:
             
             Atenciosamente,
             GitHub Actions
-          to: juliapadilhadarosa@example.com
-          from: github-actions@example.com
+          to: juliapadilhadarosa@hotmail.com
+          from: juliapadilhadarosa@hotmail.com
         continue-on-error: true
 
   dependency-check:
@@ -71,8 +81,18 @@ jobs:
         run: npm outdated || true
         continue-on-error: true
         
+      - name: Check for mail credentials
+        id: check-secrets
+        run: |
+          if [[ "${{ secrets.MAIL_SERVER }}" && "${{ secrets.MAIL_PORT }}" && "${{ secrets.MAIL_USERNAME }}" && "${{ secrets.MAIL_PASSWORD }}" ]]; then
+            echo "has_mail_secrets=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_mail_secrets=false" >> $GITHUB_OUTPUT
+            echo "Email não será enviado pois os segredos não foram configurados."
+          fi
+        
       - name: Send notification on outdated dependencies
-        if: success()
+        if: success() && steps.check-secrets.outputs.has_mail_secrets == 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{secrets.MAIL_SERVER}}
@@ -90,6 +110,6 @@ jobs:
             
             Atenciosamente,
             GitHub Actions
-          to: juliapadilhadarosa@example.com
-          from: github-actions@example.com
+          to: juliapadilhadarosa@hotmail.com
+          from: juliapadilhadarosa@hotmail.com
         continue-on-error: true
